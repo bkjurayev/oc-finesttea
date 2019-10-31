@@ -1,0 +1,10 @@
+[viewBag]
+==
+<div class="d-flex">
+    <h2>Отзывы покупателей</h2>
+    <a href="#" class="show_all">Все отзывы</a>
+</div>
+        
+{% for review in reviews %}
+    {% partial 'blocks/review-item' review=review %}
+{% endfor %}

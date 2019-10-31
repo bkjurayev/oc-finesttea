@@ -1,0 +1,89 @@
+title = "Отзывы"
+url = "/reviews/:slug"
+layout = "default"
+is_hidden = 0
+child_of = "index"
+hide_crumb = 1
+crumb_title = "Product reviews"
+remove_crumb_trail = 0
+crumb_disabled = 0
+
+[ProductPage]
+slug = "{{ :slug }}"
+slug_required = 1
+smart_url_check = 0
+
+[MakeReview]
+mode = "ajax"
+flash_on = 1
+redirect_on = 0
+redirect_page = "reviews"
+==
+{% set obProduct = ProductPage.get() %}
+
+<nav class="breadcrumbs">
+    <div class="wrap">
+        <a href="/">Главная</a><span></span>
+        <a href="{{obProduct.category.getPageUrl('product/catalog')}}"> {{ obProduct.category.name }} </a><span></span>
+        <a href="{{obProduct.getPageUrl('product/product')}}"> {{ obProduct.name }} </a><span></span>
+        <p> Отзывы </p>
+    </div>
+</nav>
+
+
+
+<div class="wrap reviews_page">
+    <h1>Отзывы</h1>
+    
+    
+    <p class="caption">Оставить отзыв</p>
+    <form action="#" data-request-success="location.reload()" data-request="MakeReview::onCreate" data-request-flash class="review_form">
+        <input type="hidden" name="product_id" value="{{obProduct.id}}">
+        
+        <div class="half">
+            <input type="text" name="name" placeholder="Имя">
+        </div>
+        <div class="half">
+            <input type="text" class="mask_tel" name="phone" placeholder="Телефон">
+        </div>
+        <div class="half">
+            <input type="text" name="email" placeholder="Почта">
+        </div>
+        <div class="half">
+            <p>Оценка</p>
+            <div class="stars">
+                <div class="active"><input type="radio" name="rating" value="1"></div>
+                <div class="active"><input type="radio" name="rating" value="2"></div>
+                <div class="active"><input type="radio" name="rating" value="3"></div>
+                <div class="active"><input type="radio" name="rating" value="4"></div>
+                <div class="active"><input type="radio" name="rating" value="5"></div>
+                <p>5.0</p>
+            </div>
+        </div>
+        <textarea name="comment" placeholder="Отзыв"></textarea>
+        <button data-attach-loading class="btn">Отправить</button>
+    </form>
+    
+    
+    <div class="reviews">
+        {% for item in obProduct.review %}
+            {% partial 'blocks/review-item' review=item %}
+        {% endfor %}
+    </div>
+    
+</div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+{% put scripts %}
+    <script>
+        $(".mask_tel").mask("+3(999) 999-99-99")
+    </script>
+{% endput %}

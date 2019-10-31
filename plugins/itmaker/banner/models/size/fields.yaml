@@ -1,0 +1,19 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: itmaker.banner::lang.fields.name
+        comment: itmaker.banner::lang.fields.size_name_comment
+        commentHtml: true
+        span: left
+
+    image:
+        label: itmaker.banner::lang.fields.image
+        span: right
+        type: fileupload
+        mode: image
+        thumbOptions:
+            mode: crop
+            extension: auto

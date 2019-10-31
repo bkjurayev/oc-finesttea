@@ -1,0 +1,17 @@
+columns:
+    name:
+        label: Name
+        type: text
+        searchable: true
+        sortable: true
+    email:
+        label: Email
+        type: text
+        searchable: true
+        sortable: true
+    question:
+        label: Question
+        type: text
+    answer:
+        label: Answer
+        type: text

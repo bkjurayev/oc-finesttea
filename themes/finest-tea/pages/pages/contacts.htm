@@ -1,0 +1,47 @@
+title = "Контакты"
+url = "/contacts"
+layout = "default"
+is_hidden = 0
+child_of = "index"
+hide_crumb = 0
+remove_crumb_trail = 0
+crumb_disabled = 0
+==
+<div class="wrap">
+    <h1>Контакты</h1>
+    <div class="contacts_block">
+        <div class="addresses">
+            <div class="block">
+                <p class="name">Адрес</p>
+                <p>
+                    Киев, ул. Харьковское шоссе, 19,
+                    торгово-офисный центр MegaCity <br>(-1 этаж)
+                </p>
+            </div>
+            <div class="block">
+                <p class="name">Телефон</p>
+                <p>
+                    <a href="tel:+7 977 642 76 04">+7 977 642 76 04</a>
+                    <a href="tel:+380 66 449 99 76">+380 66 449 99 76</a>
+                </p>
+            </div>
+            <div class="block">
+                <p class="name">Email</p>
+                <a href="mailto:info@puershop.com.ua">info@puershop.com.ua</a>
+            </div>
+            <div class="block">
+                <p class="name">Режим работы</p>
+                <p>Пн. – Сб.: с 10:00 до 20:00</p>
+                <p>Вс.: с 11:00 до 18:00</p>
+            </div>
+        </div>
+        <a href="#" class="map"></a>
+    </div>
+</div>
+
+
+{% put scripts %}
+<script>
+  $(".mask_tel").mask("+3(999) 999-99-99")
+</script>
+{% endput %}

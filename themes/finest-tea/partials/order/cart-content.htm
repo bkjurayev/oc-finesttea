@@ -1,0 +1,31 @@
+[viewBag]
+==
+{% set obCartElementList = Cart.get() %}
+
+<div class="ico"></div>
+
+<p class="count">{{obCartElementList.count}}</p>
+
+<p class="price">
+    <span>{{ obCartElementList.getTotalPriceValue() }}</span>
+    {{ obCartElementList.getCurrencyCode() }}
+</p>
+
+<div class="box">
+    {% for obCartElement in obCartElementList %}
+    
+    	{% set obOffer = obCartElement.offer %}
+    	{% set obProperty = obOffer.property.getByCode('weight') %}
+    	
+        <p>  
+            {{obOffer.product.name|truncate(15)}}
+            <small>{{obCartElement.quantity}}
+                <span class="x">x</span>
+                {{ obProperty.property_value.getValueString() }} {{ obProperty.measure.name }}
+            </small>
+        </p>
+        
+    {% endfor %}
+    
+    <a href="{{'purchase/basket'|page}}">Купить</a>
+</div>

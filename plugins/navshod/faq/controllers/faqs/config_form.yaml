@@ -1,0 +1,10 @@
+name: FAQs
+form: $/navshod/faq/models/faq/fields.yaml
+modelClass: Navshod\Faq\Models\FAQ
+defaultRedirect: navshod/faq/faqs
+create:
+    redirect: 'navshod/faq/faqs/update/:id'
+    redirectClose: navshod/faq/faqs
+update:
+    redirect: navshod/faq/faqs
+    redirectClose: navshod/faq/faqs

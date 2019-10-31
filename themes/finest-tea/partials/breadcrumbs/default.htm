@@ -1,0 +1,32 @@
+[viewBag]
+==
+{% set crumbOptions = breadcrumbs.options %}
+
+{% if currentCrumb.show_crumb %}
+<nav class="breadcrumbs">
+    <div class="wrap">
+        
+        {% set activeCrumb = '' %}
+        {% for crumb in breadcrumbs %}
+        
+            {% if crumb.in_crumb_trail %}
+                
+                {% if not loop.last and not crumb.crumb_disabled %} 
+                    <a href="{{crumb.baseFileName | page}}"> 
+                        {{crumb.title}} 
+                    </a>
+                    <span></span>
+                {% else %}
+                    <p>{{crumb.title}}</p>
+                {% endif %}
+                
+            {% endif %}
+
+            {% if loop.last %}
+                {% set activeCrumb = crumb %}
+            {% endif %}
+
+        {% endfor %}
+    </div>
+</nav>
+{% endif %}

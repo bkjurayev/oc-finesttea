@@ -1,0 +1,46 @@
+[viewBag]
+==
+{% if canRegister %}        
+    <div class="line">
+        <label>Имя</label>
+        <input
+            name="name"
+            type="text"
+            id="registerName"
+            placeholder="Enter your full name" />
+    </div>
+    <div class="line">
+        <label>E-mail</label>                
+        <input
+            name="email"
+            type="email"
+            class="mask_tel"
+            id="registerEmail"
+            placeholder="Enter your email" />
+    </div>
+    {% if loginAttribute == "username" %}
+    <div class="line">
+        <label for="registerUsername">Username</label>
+        <input
+            name="username"
+            type="text"
+            class="form-control"
+            id="registerUsername"
+            placeholder="Enter your username" />                            
+    </div>
+    {% endif %}            
+    <div class="line">
+        <label>Пароль</label>
+        <input
+            name="password"
+            type="password"                    
+            id="registerPassword"
+            placeholder="Choose a password" />
+    </div>
+    <button class="btn">Отправить</button>
+
+    <a href="#" data-fancybox="" data-src="#sing_in" class="bot_a">Войти в систему</a>
+
+{% else %}
+    <!-- Registration is disabled. -->
+{% endif %}

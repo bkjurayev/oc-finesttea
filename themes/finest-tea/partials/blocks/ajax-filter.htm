@@ -1,0 +1,72 @@
+[viewBag]
+==
+{# Get product list collection#}
+{% set obProductList = ProductList.make().active() %}
+
+{# Get products proeprty list for property sets with code 'main', enabled how filters #}
+{% set obPropertyList = FilterPanel.getProductPropertyList(['main'], obProductList) %}
+
+
+
+<form id="ajaxFilterForm" class="toggle">
+    
+    <p class="caption">Фильтр</p>
+    <div class="hide">
+        <div class="filter_box">
+             
+             
+             <div class="toggle_box active show pr20">
+                <p class="caption">Стоимость, грн.</p>
+                <div class="hide box">
+                   <input type="text" class="js-range-slider" name="price" value=""
+                       data-type="double"
+                       data-min="{{min}}"
+                       data-max="{{max}}"
+                       data-from="{{fMinPriceFilterValue}}"
+                       data-to="{{fMaxPriceFilterValue}}"
+                       data-force-edges="true"
+                       data-grid="false"
+                    />
+                </div>
+            </div>
+            
+            
+            {% for key, obProperty in obPropertyList if obProperty.hasValue() %}
+            
+                <div class="toggle_box  {{ key < 2 ? 'active show' }} ">
+                    <p class="caption">{{obProperty.name}}</p>
+                    <div class="hide box">
+                    
+                        {# Get filter type #}
+                        {% set sFilterType = obProperty.filter_type %}
+                    
+                        {# Get proeprty value list #}
+                        {% set obPropertyValueList = obProperty.property_value.sort() %}
+                    
+                        {# Render filtre with type == checkbox #}
+                        {% if sFilterType == 'checkbox' %}
+                            
+                            {% for obValue in obPropertyValueList %}
+                                <label class="checkbox">
+                                    <input type="checkbox" name="property[{{obProperty.id}}]" value="{{ obValue.slug }}" />
+                                    <span class="checkbox__text">{{obValue.value}}</span>
+                                </label>
+                            {% endfor %}
+                            
+                        {% endif %} 
+                    
+                    </div>
+                </div>
+            {% endfor %}
+            
+            
+            
+            <div class="buttons">
+                <button type="submit" class="btn">Применить</button>
+                <p class="reset">Сбросить</p>
+            </div>
+            
+            
+        </div>
+    </div>
+</form>

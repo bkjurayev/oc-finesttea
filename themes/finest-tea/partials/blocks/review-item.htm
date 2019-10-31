@@ -1,0 +1,27 @@
+[viewBag]
+==
+<div class="post">
+    <div class="who">
+        <img src="{{ 'assets/images/user.png' | theme }}" alt="">
+        <div class="info">
+            <p class="date"> {{ review.created_at.format('d.m.y') }} </p>
+            <p class="name"> {{ review.name }} </p>
+            <div class="stars">
+                {% for i in 1..5 %}
+                    {% if review.rating >= i  %}
+                        <div class="active"></div>
+                    {% else %}
+                        <div></div>
+                    {% endif %}
+                {% endfor %}
+                <p> {{ review.rating|number_format(1, '.', ',') }} </p>
+            </div>
+        </div>
+    </div>
+    <div class="text show_more">
+        <p class="hide">
+            {{ review.comment }}
+        </p>
+        <span class="read_more">Читать полностью</span>
+    </div>
+</div>

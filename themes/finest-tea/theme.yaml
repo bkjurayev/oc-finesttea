@@ -1,0 +1,6 @@
+name: 'Finest Tea'
+description: 'This site about tea!'
+author: ITmaker
+homepage: ''
+code: ''
+form: config/fields.yaml

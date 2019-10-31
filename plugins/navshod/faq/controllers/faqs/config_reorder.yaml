@@ -1,0 +1,4 @@
+title: FAQs
+modelClass: Navshod\Faq\Models\FAQ
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,68 @@
+title = "Главная"
+url = "/"
+layout = "default"
+is_hidden = 0
+child_of = "mey_no_parent"
+hide_crumb = 1
+remove_crumb_trail = 0
+crumb_disabled = 0
+
+[carousel]
+carousel = 2
+
+[BannerBanners]
+==
+<?php
+use Lovata\ReviewsShopaholic\Models\Review;
+
+function onStart() {
+    $this['reviews'] = Review::orderByDesc('id')->limit(4)->get();
+}
+?>
+==
+{% set obNewProductList = ProductList.make().sort('new').active().take(10) %}
+{% set obSpecialProductList = ProductList.make().sort('new').active().take(10) %}
+
+
+<!-- Slider start -->
+{% component 'carousel' %}
+    
+
+<div class="wrap">
+    
+    <!-- Categories carousel -->
+    <div class="section">
+        {% partial 'blocks/categories-carousel' %}
+    </div>
+        
+    <!-- New products carousel -->
+    <div class="section">
+        {% partial 'products/carousel' title="Новинки" products=obNewProductList %}
+    </div>
+    
+    <!-- Special products carousel -->
+    <div class="section">
+        {% partial 'products/carousel' title="Специальное предложение" products=obSpecialProductList %}
+    </div>
+    
+    <!-- Home banners -->
+    <div class="banners">
+        {% partial 'blocks/home-banners' %}
+    </div>
+    
+    <!-- Home reviews -->
+    <div class="reviews">
+        {% partial 'blocks/home-reviews' %}
+    </div>
+        
+    <!-- Home advantages -->
+    <div class="advantages">
+        {% partial 'blocks/home-advantages' %}
+    </div>
+    
+    <!-- Home seo text -->
+    <div class="seo_text">
+        {% partial 'blocks/home-seotext' %}
+    </div>
+
+</div>

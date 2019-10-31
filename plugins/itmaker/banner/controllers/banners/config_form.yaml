@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: itmaker.banner::lang.banner.label
+
+# Model Form Field configuration
+form: $/itmaker/banner/models/banner/fields.yaml
+
+# Model Class name
+modelClass: Itmaker\Banner\Models\Banner
+
+# Default redirect location
+defaultRedirect: itmaker/banner/banners
+
+# Create page
+create:
+    title: itmaker.banner::lang.banner.create_title
+    redirect: itmaker/banner/banners/update/:id
+    redirectClose: itmaker/banner/banners
+
+# Update page
+update:
+    title: itmaker.banner::lang.banner.update_title
+    redirect: itmaker/banner/banners
+    redirectClose: itmaker/banner/banners
+
+# Preview page
+preview:
+    title: itmaker.banner::lang.banner.preview_title

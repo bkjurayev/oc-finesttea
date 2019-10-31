@@ -1,0 +1,23 @@
+[viewBag]
+==
+{% if product or ProductPage %}
+    {% set product = product ?: ProductPage.get() %}
+    {% set arBreadcrumbs = CatalogBreadcrumbs.getByProductID(product.id) %}
+{% elseif CategoryPage %}
+    {% set obCategory = CategoryPage.get() %}
+    {% set arBreadcrumbs = CatalogBreadcrumbs.getByCategoryID(obCategory.id) %}
+{% endif %}
+
+{% if arBreadcrumbs is iterable %}
+    <div class="wrap">
+        <a href="{{ 'index'|page }}">Главная</a><span></span>
+        
+        {% for arItem in arBreadcrumbs %}
+            {% if loop.last %}
+                <p class="breadcrumb-item active mx-3" aria-current="page">{{ arItem.name }}</p>
+            {% else %}                
+                <a href="{{ 'list'|page({slug: arItem.slug}) }}">{{ arItem.name }}</a><span></span>             
+            {% endif %}
+        {% endfor %}            
+    </div>
+{% endif %}

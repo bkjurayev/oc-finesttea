@@ -1,0 +1,92 @@
+<?php
+
+return [
+    'banner'     => [
+        'new'           => 'New Banner',
+        'label'         => 'Banner',
+        'create_title'  => 'Create Banner',
+        'update_title'  => 'Edit Banner',
+        'preview_title' => 'Preview Banner',
+        'list_title'    => 'Manage Banners',
+    ],
+    'banners'    => [
+        'delete_selected_confirm' => 'Delete the selected Banners?',
+        'menu_label'              => 'Banners',
+        'return_to_list'          => 'Return to Banners',
+        'delete_confirm'          => 'Do you really want to delete this Banner?',
+        'delete_selected_success' => 'Successfully deleted the selected Banners.',
+        'delete_selected_empty'   => 'There are no selected Banners to delete.',
+    ],
+    'fields'     => [
+        'pretitle'             => 'Pre title',
+        'title'                => 'Title',
+        'subtitle'             => 'Sub title',
+        'link_type'            => 'Link type',
+        'product'              => 'Shopaholic Product',
+        'page'                 => 'CMS Page',
+        'url'                  => 'Write the Url manually',
+        'product_finder'       => 'Click the %s button to find a product',
+        'product_page'         => 'Product page',
+        'image'                => 'Image',
+        'size'                 => 'Size',
+        'none'                 => 'None',
+        'size_finder'          => 'Click the %s button to find a banner size',
+        'name'                 => 'Name',
+        'offer'                => 'Offer Price',
+        'button_label'         => 'Button label',
+        'button_label_comment' => 'Display only if <b>Link type</b> is defined ',
+        'bottom_caption'       => 'Bottom text',
+        'example'              => 'Example',
+        'example_comment'      => '<img src="/plugins/itmaker/banner/assets/images/banners/example.png" class="img-responsive" />',
+        'size_name_comment'    => 'Format must be <b>{number}x{number}</b>. Example: <code>300x300</code>',
+        'background'           => 'Background Image',
+        'icon'                 => 'Icon button',
+        'text_pos'             => 'Text Position',
+        'left'                 => 'Left',
+        'right'                => 'Right',
+        'center'               => 'Center',
+    ],
+    'tabs'       => [
+        'general'     => 'Overview',
+        'image'       => 'Image',
+        'size'        => 'Size',
+        'description' => 'Description',
+    ],
+    'plugin'     => [
+        'name'        => 'Banner Theme',
+        'description' => 'Settings for Banner theme',
+    ],
+    'permission' => [
+        'access'       => 'Access to Banners',
+        'access_sizes' => 'Access to Sizes'
+    ],
+    'theme'      => [
+        'settings' => 'Theme settings',
+    ],
+    'components' => [
+        'banners' => [
+            'name'        => 'Banner Banners',
+            'description' => 'Insert banners to theme sections. Auto loaded by size.',
+        ],
+        'toolbox' => [
+            'name'        => 'Banner ToolBox',
+            'description' => 'Add functionality to Shopaholic extra plugins',
+        ],
+    ],
+    'size'       => [
+        'new'           => 'New Size',
+        'label'         => 'Size',
+        'create_title'  => 'Create Size',
+        'update_title'  => 'Edit Size',
+        'preview_title' => 'Preview Size',
+        'list_title'    => 'Manage Sizes',
+    ],
+    'sizes'      => [
+        'delete_selected_confirm' => 'Delete the selected Sizes?',
+        'menu_label'              => 'Sizes',
+        'return_to_list'          => 'Return to Sizes',
+        'delete_confirm'          => 'Do you really want to delete this Size?',
+        'delete_selected_success' => 'Successfully deleted the selected Sizes.',
+        'delete_selected_empty'   => 'There are no selected Sizes to delete.',
+    ],
+];

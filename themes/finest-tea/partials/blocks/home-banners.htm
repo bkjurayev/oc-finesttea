@@ -1,0 +1,39 @@
+[viewBag]
+==
+{% set banners = BannerBanners.load('702x437', false)  %}
+{% for banner in banners %}
+   <div class="banner">
+        <picture>
+            <source media="(min-width: 992px)" srcset="{{ 'assets/images/banner1-big.jpg' | theme }}">
+            <img src="{{ banner.image.getThumb('702', '437', {mode: 'crop'}) }}" alt="">
+        </picture>
+        
+        <div class="info">
+            <p class="title"> {{ banner.title | striptags }} <span> {{ banner.subtitle | striptags }} </span> </p>
+        </div>
+    </div>
+{% endfor %}
+
+
+
+{% set banners = BannerBanners.load('1067x437', false)  %}
+{% for banner in banners %}
+    <div class="banner">
+        <picture>
+            <source media="(min-width: 992px)" srcset="{{ 'assets/images/banner2-big.jpg' | theme }}">
+            <img src="{{ banner.image.getThumb('1067', '437', {mode: 'crop'}) }}" alt="">
+        </picture>
+        
+        <div class="info">
+            <p class="title">
+                <span>{{ banner.pretitle }}</span>
+            
+                {{ banner.title | striptags('<br><span>') }}
+            </p>
+            
+            <p class="term">
+                {{ banner.subtitle | striptags('<br><span>') }}
+            </p>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,103 @@
+title = "Сравнение товаров"
+url = "/comparison"
+layout = "default"
+is_hidden = 0
+child_of = "index"
+hide_crumb = 0
+remove_crumb_trail = 0
+crumb_disabled = 0
+
+[ProductList]
+sorting = "new"
+
+[FilterPanel]
+==
+<?php
+public function onStart() {
+    $count = $this->components['ProductList']->make()->compare()->active()->count();
+    
+    if (!$count) {
+        return Redirect::to('/')->with('message', 'Comparison page is empty');
+    }
+}
+?>
+==
+{% set obProductList = ProductList.make().compare().active() %}
+
+
+<div class="wrap compare_page">
+    <div class="section">
+        <h1>Сравнение товаров</h1>
+        <div class="slider-item owl">
+        {% if obProductList.isNotEmpty() %}
+            <div class="owl-carousel">
+               {% for obProduct in obProductList %}
+                    {% partial 'products/item' obProduct=obProduct %}
+                {% endfor %}
+            </div>
+            <div class="nav_arrow">
+                <div class="prev"></div>
+                <div class="next"></div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    
+    <label class="check_compare">
+        <input type="checkbox" />
+        <span class="checkbox__text">Показывать только различия</span>
+    </label>
+    
+    <div class="section compare_block">
+        <div class="slider-item owl">
+            <div class="owl-carousel">
+                {% for obProduct in obProductList %}
+                    {% set obOffer = obProduct.offer.sort('price|asc').first() %}
+                    {% set obPropertyList = obProduct.property.group(2) %}
+                    
+                        
+                    <div class="slide">
+                        <div class="line">
+                            <p class="price"> {{obOffer.price}}{{ obOffer.currency_code }}.</p>
+                        </div>
+                        
+                        <div class="line">
+                            <div class="stars">
+                                {% for i in 1..5 %}
+                                    {% if obProduct.rating >= i  %}
+                                        <div class="active"></div>
+                                    {% else %}
+                                        <div></div>
+                                    {% endif %}
+                                {% endfor %}
+                                <p> {{ obProduct.rating|number_format(1, '.', ',') }} </p>
+                            </div>
+                        </div>
+                        
+                        {% for obProeprty in obPropertyList  %}
+                            {% set propertyValue = obProeprty.property_value.getValueString() %}
+                            <p class="line"> {{ propertyValue ? propertyValue : '-' }} </p>
+                        {% endfor %}
+                        
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="nav_arrow">
+                <div class="prev"></div>
+                <div class="next"></div>
+            </div>
+            
+            <div class="named">
+                <div class="line">Стоимость</div>
+                <div class="line">Оценка</div>
+                
+                {% set obPropertyList = FilterPanel.getProductPropertyList(['main']) %}
+                {% for obProperty in obPropertyList if obProperty.hasValue() %}
+                    <div class="line">{{ obProperty.filter_name }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,149 @@
+title = "Корзина"
+url = "/cart/user-info"
+layout = "default"
+is_hidden = 0
+child_of = "index"
+hide_crumb = 0
+remove_crumb_trail = 0
+crumb_disabled = 0
+
+[PaymentMethodList]
+
+[ShippingTypeList]
+==
+<?php
+public function onStart() {
+    $data = [];
+    $userData = Auth::getUser();
+    $sessionData = Session::get('orderData');
+    
+    if ($sessionData) {
+        $data = $sessionData;
+    }
+    
+    if ($userData && $userData->name) {
+        $data['name'] = $userData->name;
+    } 
+    
+    if ($userData && $userData->email) {
+        $data['email'] = $userData->email;
+    }
+    
+    if ($userData && $userData->surname) {
+        $data['surname'] = $userData->surname;
+    }
+    
+    if ($userData && $userData->phone) {
+        $data['phone'] = $userData->phone;
+    }
+    
+    if ($userData && $userData->whereHas('address', function ($q) {
+            $q->where('type', 'shipping');
+        })) {
+        $data['city'] = array_get($userData, 'address.city', 'Киев');
+    }
+    if ($userData && $userData->whereHas('address', function ($q) {
+            $q->where('type', 'shipping');
+        })) {
+        $data['address'] = array_get($userData, 'address.address1');
+    }
+        
+    $this['userinfo'] = $data;
+}
+
+
+public function onSaveUserdata() {
+    $data = Input::all();
+    
+    $rules = [
+        'name' => 'required|min:4',
+        'surname' => 'required|min:4',
+        'email' => 'required|email',
+        'phone' => 'required',
+        'city' => 'required|min:3',
+        'address' => 'required|min:3',
+        
+    ];
+    
+    
+    
+    $validation = Validator::make($data, $rules);
+    
+    if ($validation->fails()) {
+        throw new ValidationException($validation);
+    }
+    
+    Session::put('orderData', $data);
+    
+    return Redirect::to('/cart/shipping-info');
+}
+?>
+==
+{% set obCartElementList = Cart.get() %}
+
+<div class="wrap">
+    <h1>Корзина</h1>
+    <div class="basket_block">
+        <div class="top">
+            <p> <a href="{{'purchase/basket1'|page}}">01. Состав заказа</a></p>
+            <p class="current">02. Контактные данные</p>
+            <p class="disable">03. Выбор доставкии оплаты</p>
+        </div>
+        <form data-request="onSaveUserdata" data-request-flash class="form">
+            <div class="col">
+                <label>Имя</label>
+                <input type="text" name="name" value="{{userinfo.name}}">
+                <label>Фамилия</label>
+                <input type="text" name="surname" value="{{userinfo.surname}}">
+                <label>Телефон</label>
+                <input type="text" name="phone" class="mask_tel" value="{{userinfo.phone}}">
+            </div>
+            <div class="col">
+                <label>Почта</label>
+                <input type="text" name="email" value="{{userinfo.email}}">
+                <label>Город</label>
+                <input type="text" name="city" value="{{userinfo.city}}">
+                <label>Адрес доставки</label>
+                <input type="text" name="address" value="{{userinfo.address}}">
+                
+                <button data-attach-loading type="submit" class="btn">Оформить заказ</button>
+            </div>
+            
+            <div class="col">
+                <div class="order_items">
+                    {% for obCartElement in obCartElementList if obCartElementList.isNotEmpty() %}
+                        {% set obOffer = obCartElement.offer %}
+                        {% set obProduct = obOffer.product %}
+                        
+                        <div class="box_item">
+                            <div class="col_1">
+                                <img src='{{ obProduct.preview_image.getThumb(160, 115) }}' alt="">
+                                <p class="name">
+                                    <a href="{{ obProduct.getPageUrl('product/product') }}">{{ obProduct.name }}</a>
+                                </p>
+                            </div>
+                            <div class="col_2">
+                                <div class="price">{{ obOffer.price }} <span>{{obOffer.currency}}.</span></div>
+                                <p>{{ obCartElement.quantity }}</p>
+                                <div class="price">{{ obCartElement.price }} <span>{{ obCartElement.currency }}.</span></div>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        <div style="text-align: center">Cart is empty</div>
+                    {% endfor %}
+                        
+                </div>
+                
+            </div>
+            
+        </form>
+        <div class="bottom">
+            <p class="total">Итого {{ obCartElementList.getTotalPrice() }} <span>{{ obCartElementList.getCurrency() }}.</span></p>
+            
+            <div class="flex">
+                <a href="{{'index'|page}}" class="back">К покупкам</a>
+            </div>
+        </div>
+    </div>
+</div>

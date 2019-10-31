@@ -1,0 +1,13 @@
+[viewBag]
+==
+{% if iPage < iMaxPage %}
+    <button data-request="ProductList::onAjaxRequest" 
+        data-request-update="
+            'products/ajax-list': '@#products-ajaxList',
+            'products/infinity-loader': '#infinity-loader',
+        " 
+        data-request-data="page: {{iPage+1}}" class="load_more">
+        
+        Показать еще
+    </button>
+{% endif %}

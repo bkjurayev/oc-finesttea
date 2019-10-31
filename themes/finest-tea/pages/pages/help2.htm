@@ -1,0 +1,105 @@
+title = "Помощь"
+url = "/help2"
+layout = "default"
+is_hidden = 0
+child_of = "index"
+hide_crumb = 0
+remove_crumb_trail = 0
+crumb_disabled = 0
+==
+<?php
+use Navshod\Faq\Models\FAQ;
+
+function onStart () 
+{
+    $faqs = FAQ::all();
+    if (!$faqs) 
+    {
+        return;
+    }
+    $this['faqs'] = $faqs;
+}
+
+function onSend () 
+{
+    $data = Input::only('name', 'email', 'question');
+    
+    $rules = [
+        'name'     => 'required|min:3',
+        'email'    => 'required|email',
+        'question' => 'required'
+    ];
+    
+    $validation = Validator::make($data, $rules);
+    
+    if ($validation->fails()) 
+    {
+        throw new ValidationException($validation);
+    }
+    
+    $faq = new FAQ();
+    
+    $faq->name = $data['name'];
+    $faq->email = $data['email'];
+    $faq->question = $data['question'];
+    $faq->save();
+    
+    
+    Flash::success('Ваш вопрос принят');
+    
+}
+?>
+==
+<div class="wrap">
+    <h1>Помощь</h1>
+    <div class="help_block">
+        <div class="left">
+            <a href="{{ 'pages/help'| page }}">Как сделать заказ</a>
+            <a href="{{ 'pages/help2'| page}}" class="active" >Служба он-лайн поддержки</a>
+            <a href="{{'pages/help3' | page}}">Политика возврата</a>
+            <a href="{{'pages/help4' | page}}">Правила продажи</a>
+        </div>
+        <div class="right">
+            <div class="w50">
+                <h2>Задайте свой вопрос</h2>
+                
+                <form data-request='onSend' data-request-flash class="review_form">
+                    <div class="half">
+                        <input type="text" name="name" placeholder="Имя">
+                    </div>
+                    <div class="half">
+                        <input type="text" name="email" placeholder="Почта">
+                    </div>
+                    <textarea name="question"  placeholder="Вопрос"></textarea>
+                    <button class="btn">Отправить</button>
+                </form>
+            </div>
+            <div class="w50">
+                <h2>Часто задаваемы вопросы</h2>
+                <div class="faq">
+                {% for faq in faqs if faq.answer %}
+                    <div class="post toggle">
+                        <p class="caption">{{ faq.question }}</p>
+                        <div class="hide">
+                            {{ faq.answer | raw }}
+                        </div>
+                    </div>
+                {% endfor %}
+                    <!-- <div class="post toggle">
+                        <p class="caption">Вернут ли мне деньги
+                            после отмены заказа?</p>
+                        <div class="hide">
+                            Lorem!<br> sddsgh
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% put scripts %}
+    <script>
+        $(".mask_tel").mask("+3(999) 999-99-99")
+    </script>
+{% endput %}

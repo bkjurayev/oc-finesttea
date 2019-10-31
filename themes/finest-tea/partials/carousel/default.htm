@@ -1,0 +1,41 @@
+[viewBag]
+==
+{% if carousel.carousel and carousel.carousel.slides %}
+    <div class="slider owl">
+        <div class="owl-carousel">
+            {% for i, slide in carousel.carousel.slides %}
+                <div data-num="0{{i+ 1}}" class="slide">
+                    <div class="img">
+                        <picture>
+                            <source media="(min-width: 1400px)" srcset="{{ slide.imagePath }}">
+                            <source media="(min-width: 992px)" srcset="{{ slide.imagePath }}">
+                            <source media="(min-width: 670px)" srcset="{{ slide.imagePath }}">
+                            <img src="{{ slide.imagePath }}" alt="">
+                        </picture>
+                    </div>
+                    <div class="info">
+                        <p class="title">Интернет-магазин настоящего чая</p>
+                        <p class="promo">
+                           {{ slide.caption }}
+                        </p>
+                        <p class="text">
+                            {{ slide.description|raw }}
+                        </p>
+                        <br>
+                        <a href="{{ slide.url }}" class="btn">Каталог</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="nav_arrow">
+            <div class="prev"></div>
+                <div class="current">
+                    <div class="cur">01</div>&nbsp/&nbsp
+                    <div class="size"> {{ carousel.carousel.slides|length }} </div>
+                    <!--Здесь программно выводим кл. слайдов-->
+                </div>
+            <div class="next"></div>
+        </div>
+    </div>
+{% endif %}

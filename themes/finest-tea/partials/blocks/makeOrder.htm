@@ -1,0 +1,108 @@
+[viewBag]
+==
+{% set obPaymentMethodList = PaymentMethodList.make().sort().active() %}
+{% set obShippingTypeList = ShippingTypeList.make().sort().active() %}
+{% set obCartElementList = Cart.get() %}
+{% set coupons = Cart.getAppliedCouponList() %}
+<form data-request="MakeOrder::onCreate" data-request-flash class="wrap">
+    <input type="hidden" name="order[shipping_price]" id="shipping_price_input" value="0">
+    <input type="hidden" name="user[name]"    value="{{userdata.name}}">
+    <input type="hidden" name="user[email]"   value="{{userdata.email}}">
+    <input type="hidden" name="user[address]" value="{{userdata.address}}">
+    <input type="hidden" name="user[surname]" value="{{userdata.surname}}">
+    <input type="hidden" name="user[address]" value="{{userdata.address}}">
+
+    <h1>Корзина</h1>
+    <div class="basket_block">
+        <div class="top">
+            <p><a href="{{'purchase/basket1'|page}}">01. Состав заказа</a></p>
+            <p><a href="{{'purchase/basket2'|page}}">02. Контактные данные</a></p>
+            <p class="current">03. Выбор доставкии оплаты</p>
+        </div>
+        <div class="check_out_block">
+            <div class="column">
+                <div class="col">
+                    <p class="name">Доставка</p>
+                    
+                    {% for obShippingType in obShippingTypeList %}
+                        <label class="radiobox">
+                            <input type="radio"
+                                {{ loop.first ? 'checked' }}
+                                data-request="Cart::onSetShippingType"
+                                data-request-success="
+                                    $('#shipping_price_input').val(data.data.shipping_price.price);
+                                    $('#shippingPrice').text(data.data.shipping_price.price);
+                                    $('#totalPrice').text(data.data.total_price.price);
+                                "
+                                data-request-data="shipping_type_id: {{ obShippingType.id }}"
+                                name="order[shipping_type_id]" 
+                                value="{{ obShippingType.id }}"/>
+                            <span class="radiobox__text">{{ obShippingType.name }} </span>
+                        </label>
+                    {% endfor %}
+                    
+                </div>
+                <div class="col">
+                    <p class="name">Оплата</p>
+                    {% for obPaymentMethod in obPaymentMethodList %}
+                        <label class="radiobox">
+                            <input type="radio" 
+                                {{ loop.first ? 'checked' }}
+                                name="order[payment_method_id]" 
+                                value="{{ obPaymentMethod.id }}"/>
+                            <span class="radiobox__text">{{ obPaymentMethod.name }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+                <div class="col">
+                    {% if coupons %}
+                        <p class="name">Использованные купоны:</p>
+                        {% for coupon in coupons %}
+                            <p>
+                                {{ coupon.coupon_group.name }} - {{ coupon.code }}
+                                <a href="javascript();" 
+                                    data-request="Cart::onRemoveCoupon" 
+                                    data-request-data="'coupon': '{{ coupon.code }}'"
+                                    data-request-update="'blocks/makeOrder': '#makeOrder'">
+                                    удалить</a>
+                            </p>
+                        {% endfor %}
+                    {% else %}
+                        <p class="name">У вас есть купоны? Тогда используйте их.</p>
+                    {% endif %}
+                    <form>
+                        <input type="text" name="coupon" class="couponValue" placeholder="Введите купон">
+                        <p id="couponCreateError"></p>
+                        <button class="btn add-coupon" type="button">проверить</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col">
+                <div class="check">
+                    <div class="inline">
+                        <p> {{obCartElementList.getTotalQuantity()}} товара на сумму</p>
+                        <p class="price"> {{obCartElementList.getTotalPriceValue()}} <span>{{obCartElementList.getCurrency()}}.</span></p>
+                    </div>
+                    <div class="inline">
+                        <p>Cтоимость доставки</p>
+                        <p class="price"> <strong id="shippingPrice">
+                            {{ obCartElementList.getTotalPriceValue() - obCartElementList.getTotalPriceValue()}}</strong> <span>{{obCartElementList.getCurrency()}}.</span>
+                        </p>
+                    </div>
+                    <div class="inline">
+                        <p>Скидки</p>
+                        <p class="price"> <strong id="shippingPrice">
+                            {{ obCartElementList.getDiscountTotalPriceValue() }}</strong> <span>{{obCartElementList.getCurrency()}}.</span>
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="inline total">
+                        <p>К оплате</p>
+                        <p class="price"> <strong id="totalPrice">{{obCartElementList.getTotalPriceValue()}}</strong> <span> {{obCartElementList.getCurrency()}}.</span></p>
+                    </div>
+                    <button data-attach-loading class="btn">Заказ подтверждаю</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

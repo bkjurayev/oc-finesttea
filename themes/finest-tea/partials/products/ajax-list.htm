@@ -1,0 +1,5 @@
+[viewBag]
+==
+{% for obProduct in arProductList %}
+    {% partial 'products/item' obProduct=obProduct %}
+{% endfor %}

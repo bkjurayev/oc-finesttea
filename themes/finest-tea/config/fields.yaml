@@ -1,0 +1,29 @@
+tabs:
+    fields:
+        social_links:
+            type: repeater
+            form:
+                fields:
+                    url:
+                        type: text
+                        label: Вставьте ссылку на соц. сеть
+                        span: left
+                    class:
+                        type: dropdown
+                        options:
+                            vk: В контакте
+                            insta: Инстаграм
+                            fb: Фейсбук
+                        label: Название соц.сети
+                        span: right
+            tab: settings
+        phone:
+            type: text
+            span: left
+            label: Номер телефона
+            tab: settings  
+        email:
+            type: text
+            span: right
+            label: Укажите почту
+            tab: settings

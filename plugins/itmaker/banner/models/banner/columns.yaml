@@ -1,0 +1,13 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    size:
+        label: itmaker.banner::lang.fields.size
+        relation: size
+        select: name
+    escape_title:
+        label: itmaker.banner::lang.fields.title
+    escape_subtitle:
+        label: itmaker.banner::lang.fields.subtitle

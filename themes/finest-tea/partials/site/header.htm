@@ -1,0 +1,92 @@
+[viewBag]
+
+[staticMenu]
+code = "header-menu"
+==
+{% set obCategoryList = CategoryList.make().tree() %}
+
+<div class="wrap">
+    <a href="{{'index'|page}}" class="logo">
+    	<picture>
+    		<source media="(min-width: 1200px)" srcset="{{ 'assets/images/logo.png' | theme }}">
+    		<source media="(min-width: 670px)" srcset="{{ 'assets/images/logo-tab.png' | theme }}">
+    		<img src="{{ 'assets/images/logo-mob.png' | theme }}" alt="">
+    	</picture>
+    </a>
+	<div class="block">
+		<div class="line mobi">
+            <form action="/list" class="search">
+                <div>
+                    <input type="text" name="query" placeholder="Поиск" value="{{ input('query') }}">
+                    <button></button>
+                </div>
+            </form>
+            <div class="group">
+                <a class="tel" href="tel:+38(900)900-90-90">
+                    {{ this.theme.phone }}
+                </a>
+                <p class="mail">e-mail@info.com</p>
+                
+                {% if user %}
+                    <a href="{{'cabinet/index'|page}}" class="lk">Личный кабинет</a>
+                {% else %}
+                    <a  data-fancybox="#sing_in" data-src="#sing_in" class="lk">Личный кабинет</a>
+                {% endif %}
+            </div>
+            <a href="{{ 'product/comparison'| page }}" class="libra"><img src="{{ 'assets/images/icons/libra2.svg' | theme }}" alt=""></a>
+            
+            <div class="fixi">
+                <div class="menu_ico"><div></div></div>
+                <div class="basket" id="cart-content">
+                    {% partial 'order/cart-content' %}
+                </div>
+            </div>
+            
+		</div>
+		<div class="line for_menu">
+			<div class="for_catalog">
+                <p class="sub_menu">Каталог</p>
+                <ul class="ul_catalog">
+                    <li class="back"><span>В меню</span></li>
+                    
+                    {% for obCategory in obCategoryList %}
+                        <li><a href="{{ obCategory.getPageUrl('product/catalog') }}">{{obCategory.name}}</a></li>
+                    {% endfor %}
+                    
+                </ul>
+			</div>
+			
+			<ul class="menu">
+                {% if staticMenu.menuItems %}    
+                    {% partial staticMenu ~ "::items" items=staticMenu.menuItems %}            
+                {% endif %}
+			</ul>
+		</div>
+		
+
+   
+
+
+         
+         <div class="modal">
+            <div id="sing_in" class="window">
+                <p class="caption">Войти в систему</p>
+                <form action="#" class="sing_form" data-request="onSignin">
+                    
+                    {% partial 'account/signin' %}
+                   
+                </form>
+            </div>
+            
+            
+            <div id="sing_up" class="window">
+                <p class="caption">Регистарция</p>
+                <form action="#" class="sing_form" data-request="onRegister">
+                
+                    {% partial 'account/register' %}  
+               
+                </form>
+            </div>
+       </div>
+   </div>
+</div>

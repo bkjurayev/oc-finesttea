@@ -1,0 +1,99 @@
+title = "Личный кабинет"
+url = "/account/orders"
+layout = "default"
+is_hidden = 0
+child_of = "index"
+hide_crumb = 0
+remove_crumb_trail = 0
+crumb_disabled = 0
+
+[session]
+security = "user"
+redirect = "auth"
+
+[StatusList]
+==
+<div class="wrap">
+    <h1>Личный кабинет</h1>
+    <div class="help_block lk_block">
+        <div class="left">
+            <a href="{{'cabinet/index'| page}}">Личные данные</a>
+            <a href="{{'cabinet/orders'| page}}" class="active">Заказы</a>
+            <a href="{{'pages/program'|page}}">Партнерская программа</a>
+            <a href="{{'cabinet/password'| page}}">Изменение пароля</a>
+            <a href="#" data-request="onLogout" data-request-data="redirect: '/'" class="last">Выход</a>
+        </div>
+        <div class="right content">
+            <div class="sort">
+                <p class="title">Сортировать по:</p>
+                <div class="select">
+                    <p class="val">Все</p>
+                    <select>
+                        <option>Все</option>
+                        <option>Доставлены</option>
+                        <option>В пути</option>
+                        <option>Архив</option>
+                    </select>
+                </div>
+                <div class="a">
+                    <a href="#" class="active">Все</a>
+                    <a href="#">Доставлены</a>
+                    <a href="#">В пути</a>
+                    <a href="#">Архив</a>
+                </div>
+            </div>
+            {% component 'StatusList' %}
+            <div class="orders">
+                {% for order in user.order %}
+                    <div class="order_item">
+                        <div class="col_1" style="padding-top: 2rem; padding-bottom: 2rem;">
+                            <p class="name">
+                                <span>{{ order.order_number  }}</span>
+                                {{ order.order_offer.count }} шт.
+                            </p>
+                            <p class="name">
+                                <span>{{ order.shipping_type.name }}</span>
+                                {{ order.status.name }}
+                            </p>
+                        </div>
+                        <div class="col_2">
+                            <div class="price" style="white-space: nowrap">
+                                {{ order.total_price_value }} {{ order.currency.symbol }} 
+                            </div>
+                            <p>{{ order.payment_method.name }}</p>
+                            <div class="price">{{ order.created_at.format(' d.m.Y') }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!-- <div class="order_item">
+                    <div class="col_1">
+                        <img src="{{ 'assets/images/product/imsg_9310.jpg' | theme }}" alt="">
+                        <p class="name">
+                            <span>Зеленый чай</span>
+                            BiLuoChun
+                        </p>
+                    </div>
+                    <div class="col_2">
+                        <div class="price">430 <span>грн.</span></div>
+                        <p>2</p>
+                        <div class="price">860 <span>грн.</span></div>
+                    </div>
+                </div>
+                <div class="order_item">
+                    <div class="col_1">
+                        <img src="{{ 'assets/images/product/imsg_9310.jpg' | theme }}" alt="">
+                        <p class="name">
+                            <span>Зеленый чай</span>
+                            BiLuoChun
+                        </p>
+                    </div>
+                    <div class="col_2">
+                        <div class="price">430 <span>грн.</span></div>
+                        <p>2</p>
+                        <div class="price">860 <span>грн.</span></div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>

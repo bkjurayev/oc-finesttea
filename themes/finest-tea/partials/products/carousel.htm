@@ -1,0 +1,17 @@
+[viewBag]
+==
+<h2> {{ title }} </h2>
+<div class="slider-item owl">
+    <div class="owl-carousel">
+        {% for obProduct in products%}
+        <div class="slide">
+            {% partial 'products/item' obProduct=obProduct %}
+        </div>
+       {% endfor %}
+    </div>
+    
+    <div class="nav_arrow">
+        <div class="prev"></div>
+        <div class="next"></div>
+    </div>
+ </div>

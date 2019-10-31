@@ -1,0 +1,56 @@
+name: 'Header menu'
+items:
+    -
+        title: 'О нас'
+        type: cms-page
+        code: ''
+        reference: pages/about
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+    -
+        title: 'Доставка и оплата'
+        type: cms-page
+        code: ''
+        reference: pages/delivery
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+    -
+        title: 'Скидки и акции'
+        type: cms-page
+        code: ''
+        reference: pages/promo
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+    -
+        title: Помощь
+        type: cms-page
+        code: ''
+        reference: pages/help
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+    -
+        title: 'Партнерская программа'
+        type: cms-page
+        code: ''
+        reference: pages/program
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+    -
+        title: Контакты
+        type: cms-page
+        code: ''
+        reference: pages/contacts
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'

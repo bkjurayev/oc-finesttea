@@ -1,0 +1,138 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    pretitle:
+        label: itmaker.banner::lang.fields.pretitle
+
+tabs:
+    fields:
+        title:
+            label: itmaker.banner::lang.fields.title
+            tab: itmaker.banner::lang.tabs.general
+            span: left
+            type: richeditor
+            toolbarButtons: bold|italic|html
+            size: small
+        subtitle:
+            label: itmaker.banner::lang.fields.subtitle
+            tab: itmaker.banner::lang.tabs.general
+            span: right
+            type: richeditor
+            toolbarButtons: bold|italic|html
+            size: small
+
+        text_pos:
+            label: itmaker.banner::lang.fields.text_pos
+            tab: itmaker.banner::lang.tabs.general
+            span: left
+            type: dropdown
+            options:
+              none: itmaker.banner::lang.fields.none
+              left: itmaker.banner::lang.fields.left
+              right: itmaker.banner::lang.fields.right
+              center: itmaker.banner::lang.fields.center
+
+        offer:
+            label: itmaker.banner::lang.fields.offer
+            tab: itmaker.banner::lang.tabs.general
+            span: left
+
+        button_label:
+            label: itmaker.banner::lang.fields.button_label
+            comment: itmaker.banner::lang.fields.button_label_comment
+            commentHtml: true
+            tab: itmaker.banner::lang.tabs.general
+            span: right
+
+        bottom_caption:
+            label: itmaker.banner::lang.fields.bottom_caption
+            tab: itmaker.banner::lang.tabs.general
+            span: left
+
+        icon:
+            label: itmaker.banner::lang.fields.icon
+            tab: itmaker.banner::lang.tabs.general
+            type: dropdown
+            span: right
+
+        link_type:
+            label: itmaker.banner::lang.fields.link_type
+            tab: itmaker.banner::lang.tabs.general
+            span: left
+            type: dropdown
+            options:
+                none: itmaker.banner::lang.fields.none
+                product: itmaker.banner::lang.fields.product
+                page: itmaker.banner::lang.fields.page
+                url: itmaker.banner::lang.fields.url
+
+        product:
+            label: itmaker.banner::lang.fields.product
+            tab: itmaker.banner::lang.tabs.general
+            span: right
+            type: recordfinder
+            list: $/lovata/shopaholic/models/product/columns.yaml
+            prompt: itmaker.banner::lang.fields.product_finder
+            nameFrom: name
+            descriptionFrom: preview_text
+            trigger:
+                action: show
+                field: link_type
+                condition: value[product]
+
+        page:
+            label: itmaker.banner::lang.fields.page
+            tab: itmaker.banner::lang.tabs.general
+            span: right
+            type: dropdown
+            trigger:
+                action: show
+                field: link_type
+                condition: value[page]
+        url:
+            label: itmaker.banner::lang.fields.url
+            tab: itmaker.banner::lang.tabs.general
+            span: right
+            trigger:
+                action: show
+                field: link_type
+                condition: value[url]
+
+        _example:
+            label: itmaker.banner::lang.fields.example
+            comment: itmaker.banner::lang.fields.example_comment
+            commentHtml: true
+            tab: itmaker.banner::lang.tabs.description
+            type: section
+
+
+        image:
+            label: itmaker.banner::lang.fields.image
+            tab: itmaker.banner::lang.tabs.image
+            type: fileupload
+            mode: image
+            thumbOptions:
+                mode: crop
+                extension: auto
+
+        background:
+            label: itmaker.banner::lang.fields.background
+            tab: itmaker.banner::lang.tabs.image
+            type: fileupload
+            mode: image
+            thumbOptions:
+                mode: crop
+                extension: auto
+
+secondaryTabs:
+    fields:
+        size:
+            label: itmaker.banner::lang.fields.size
+            tab: itmaker.banner::lang.tabs.size
+            type: recordfinder
+            list: $/itmaker/banner/models/size/columns.yaml
+            prompt: itmaker.banner::lang.fields.size_finder
+            nameFrom: name
+            descriptionFrom: image.path

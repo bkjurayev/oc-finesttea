@@ -1,0 +1,49 @@
+title = "Корзина"
+url = "/cart/shipping-info"
+layout = "default"
+is_hidden = 0
+child_of = "index"
+hide_crumb = 0
+remove_crumb_trail = 0
+crumb_disabled = 0
+
+[PaymentMethodList]
+
+[ShippingTypeList]
+
+[MakeOrder]
+mode = "ajax"
+flash_on = 1
+redirect_on = 1
+redirect_page = "purchase/checkout"
+==
+<?php
+public function onStart() {
+    $this['userdata'] = Session::get('orderData');
+}
+?>
+==
+<div id="makeOrder">
+    {% partial 'blocks/makeOrder' %}
+</div>
+
+{% put scripts %}
+    <script>
+        $(document).on('click', '.add-coupon', function () {
+            var coupon = $('.couponValue').val();
+            $(this).parent().request('Cart::onAddCoupon', {
+                update: {'blocks/makeOrder': '#makeOrder'},
+                data: {coupon: coupon},
+                success: function(data) {
+                    if (data.message && !data.status) {
+                         $.oc.flashMsg({ text: data.message, class: 'error' })   
+                    } else {
+                        $('#makeOrder').html(data['blocks/makeOrder']);  
+                    }
+                    this.success(data);
+                },
+                
+            });
+        });
+    </script>
+{% endput %}

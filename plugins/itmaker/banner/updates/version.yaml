@@ -1,0 +1,31 @@
+1.0.1:
+    - 'First version of Banner'
+1.0.2:
+    - 'Create Banners Table'
+    - create_banners_table.php
+1.0.3:
+    - 'Create Sizes Table and Seed sizes'
+    - create_sizes_table.php
+    - seed_sizes.php
+1.0.4:
+    - 'Seed User Properties'
+    - seed_user_properties.php
+1.0.5:
+    - 'Add icon column to Banners table'
+    - add_icon_column_banners_table.php
+1.0.6:
+    - 'Add link_type column to Banners table'
+    - add_link_type_column_banners_table.php
+1.0.7:
+    - 'Add text_pos column to Banners table'
+    - add_text_pos_column_banners_table.php
+1.0.8:
+    - 'Fix marketplace theme name'
+1.0.9:
+    - 'Add support for FilterShopaholic plugin'
+1.0.10:
+    - 'Add Twig filters for country/state'
+1.0.11:
+    - 'Load Price range from ProductCollection'
+1.0.12:
+    - 'Add CreditCard and PayPal_Express payments'

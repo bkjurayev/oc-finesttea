@@ -1,0 +1,224 @@
+title = "Каталог"
+url = "/list/:category?zelenyj-chaj"
+layout = "default"
+is_hidden = 0
+child_of = "mey_no_parent"
+hide_crumb = 1
+remove_crumb_trail = 0
+crumb_disabled = 0
+
+[ProductList]
+sorting = "new"
+
+[Pagination]
+count_per_page = 12
+pagination_limit = 5
+active_class = "_act"
+first_button_name = "First"
+first_button_limit = 1
+first-more_button_name = "..."
+first-more_button_limit = 1
+prev_button_name = "Prev"
+prev_button_limit = 1
+prev-more_button_name = "..."
+prev-more_button_limit = 1
+next-more_button_name = "..."
+next-more_button_limit = 1
+next_button_name = "Next"
+next_button_limit = 1
+last-more_button_name = "..."
+last-more_button_limit = 1
+last_button_name = "Last"
+last_button_limit = 1
+
+[BrandList]
+
+[CategoryPage]
+slug = "{{ :category }}"
+slug_required = 1
+smart_url_check = 0
+
+[FilterPanel]
+==
+<?php
+function onInit()
+{
+    //Get category object
+    $obCategory = $this->CategoryPage->get();
+    if (empty($obCategory)) {
+        return;
+    }
+    
+
+    //Get active sorting and page number
+    $sActiveSorting = input('sort') ? input('sort') : $this->ProductList->getSorting();
+    $iPage = $this->Pagination->getPageFromRequest();
+    
+    //Get brand list
+    $obBrandList = $this->BrandList->make()->sort()->active()->category($obCategory->id);
+
+    $bSaleFilter = (bool) input('sale');
+
+    //Get filter by brand from request
+    $arFilterBrandList = explode('|', input('brand'));
+    $arFilterBrandIDList = [];
+
+    //Get brand ID list for filter
+    if (!empty($arFilterBrandList)) {
+        foreach($obBrandList as $obBrand) {
+            if (in_array($obBrand->slug, $arFilterBrandList)) {
+                $arFilterBrandIDList[] = $obBrand->id;
+            }
+        }
+    }
+
+    //Get price filter
+    $arPriceFilterValue = explode('|', input('price'));
+    $fMinPriceFilterValue = array_get($arPriceFilterValue, 0);
+    $fMaxPriceFilterValue = array_get($arPriceFilterValue, 1);
+
+    //Get filter by properties
+    $arFilterValue = (array) input('property');
+    if (!empty($arFilterValue)) {
+        foreach($arFilterValue as $sKey => &$sValue) {
+            $sValue = explode('|', $sValue);
+        }
+    }
+
+    $arFilterValueWithoutProperty = [];
+
+    //Get product list with filter by category
+    if (input('query')) {
+        $obCategoryProductList = $this->ProductList->make()->active()
+            ->search(input('query'))->sort($sActiveSorting)
+            ->category($obCategory->id);
+    } else {
+        $obCategoryProductList = $this->ProductList->make()->active()->sort($sActiveSorting)->category($obCategory->id);
+    }
+    
+
+    //Get property list for filter panel
+    $obProductPropertyList = $obCategory->product_filter_property;    
+    $obOfferPropertyList = $obCategory->offer_filter_property;
+
+    foreach($obProductPropertyList->getIDList() as $iPropertyID) {
+        $arFilterValueTemp = $arFilterValue;
+        if (isset($arFilterValueTemp[$iPropertyID])) {
+            unset($arFilterValueTemp[$iPropertyID]);
+        }
+
+        $arFilterValueWithoutProperty[$iPropertyID] = $arFilterValueTemp;
+    }
+
+    foreach($obOfferPropertyList->getIDList() as $iPropertyID) {
+        $arFilterValueTemp = $arFilterValue;
+        if (isset($arFilterValueTemp[$iPropertyID])) {
+        unset($arFilterValueTemp[$iPropertyID]);
+        }
+
+        $arFilterValueWithoutProperty[$iPropertyID] = $arFilterValueTemp;
+    }
+
+    //Get product list with filter by brands and properties
+    $obFilteredProductList = $obCategoryProductList->copy()->filterByBrandList($arFilterBrandIDList)->filterByPrice($fMinPriceFilterValue, $fMaxPriceFilterValue);
+    if ($bSaleFilter) {
+        $obFilteredProductList->filterByDiscount();
+    }
+
+    $obProductList = $obFilteredProductList->copy()
+        ->filterByProperty($arFilterValue, $obProductPropertyList)
+        ->filterByProperty($arFilterValue, $obOfferPropertyList);
+
+    
+    //Get product list for page
+    $arProductList = $obProductList->page($iPage, $this->Pagination->getCountPerPage());
+
+    //Get offers with min/max prices
+    $obOfferMinPrice = $obCategoryProductList->getOfferMinPrice();
+    $obOfferMaxPrice = $obCategoryProductList->getOfferMaxPrice();
+
+    //Get max page number
+    $iMaxPage = $this->Pagination->getMaxPage($obProductList->count());
+    
+    //Init template variables
+    $this['obCategory'] = $obCategory;
+    $this['obBrandList'] = $obBrandList;
+
+    $this['obProductPropertyList'] = $obProductPropertyList;
+    $this['obOfferPropertyList'] = $obOfferPropertyList;
+    $this['arFilterValue'] = $arFilterValue;
+    $this['arFilterValueWithoutProperty'] = $arFilterValueWithoutProperty;
+
+    $this['arFilterBrandIDList'] = $arFilterBrandIDList;
+    $this['fMinPriceFilterValue'] = $fMinPriceFilterValue;
+    $this['fMaxPriceFilterValue'] = $fMaxPriceFilterValue;
+    $this['obOfferMinPrice'] = $obOfferMinPrice;
+    $this['obOfferMaxPrice'] = $obOfferMaxPrice;
+    $this['bSaleFilter'] = $bSaleFilter;
+
+    $this['sActiveSorting'] = $sActiveSorting;
+    $this['iMaxPage'] = $iMaxPage;
+    $this['iPage'] = $iPage;
+    $this['obCategoryProductList'] = $obCategoryProductList;
+    $this['obFilteredProductList'] = $obFilteredProductList;
+    $this['obProductList'] = $obProductList;
+    $this['arProductList'] = $arProductList;
+}
+?>
+==
+{% set obCategory = CategoryPage.get() %}
+
+<nav class="breadcrumbs">
+    <div class="wrap">
+        <a href="/">Главная</a><span></span>
+        <p> {{ obCategory.name }} </p>
+    </div>
+</nav>
+
+
+<div class="wrap catalog_page">
+    
+    <!-- Filter panel -->
+    <div class="filter_block">
+        {% partial 'blocks/ajax-filter'
+            obCategory=obCategory
+            min_value=fMinPriceFilterValue
+            max_value=fMaxPriceFilterValue
+            currency=obOfferMinPrice.currency
+            min=obOfferMinPrice.price
+            max=obOfferMaxPrice.price %}
+    </div>
+    
+    
+    
+    <!-- Content -->
+    <div class="content">
+        
+        <div class="d-flex">
+            <h3> {{obCategory.name}} </h3>
+            <div class="sort">
+                <p class="title">Сортировать:</p>
+                <div class="select">
+                    <p class="val">Цене</p>
+                    <select>
+                        <option>Цене</option>
+                        <option>Новинки</option>
+                        <option>Популярности</option>
+                    </select>
+                </div>
+                <a href="#" data-sort="price|asc">Цене</a>
+                <a href="#" data-sort="new" class="active">Новинки</a>
+                <a href="#" data-sort="rating|desc">Популярности</a>
+            </div>
+        </div>
+        
+        <div id="products-ajaxList" class="catalog">
+            {% partial 'products/ajax-list' %}
+        </div>
+        
+        <div id="infinity-loader" style="text-align: center">
+            {% partial 'products/infinity-loader' %}
+        </div>
+
+    </div>
+</div>

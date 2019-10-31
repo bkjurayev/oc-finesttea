@@ -1,0 +1,27 @@
+[viewBag]
+==
+{% set obCategoryList = CategoryList.make().tree() %}
+{% if obCategoryList.isNotEmpty() %}
+    
+    <h2>Выберите сорта чая</h2>
+    <div class="slider-item two owl">
+        <div class="owl-carousel">
+            
+            {% for obCategory in obCategoryList %}
+                <div class="slide">
+                    <a href="{{ obCategory.getPageUrl('product/catalog') }}" class="item">
+                        <img src="{{ obCategory.preview_image.getThumb(336, 264) }}" alt="">
+                        <span class="name">{{obCategory.name}}</span>
+                    </a>
+                </div>
+            {% endfor %}
+            
+        </div>
+        
+        <div class="nav_arrow">
+            <div class="prev"></div>
+            <div class="next"></div>
+        </div>
+    </div>
+    
+{% endif %}

@@ -1,0 +1,70 @@
+[viewBag]
+==
+{% set obOffer = obProduct.offer.sort('price|asc').first() %}
+{% set obListOffers = obProduct.offer.sort('price|asc') %}
+
+<div class="item">
+    
+    {% if obProduct.rating %}
+    <div class="stars">
+        {% for i in 1..5 %}
+            {% if obProduct.rating >= i  %}
+                <div class="active"></div>
+            {% else %}
+                <div></div>
+            {% endif %}
+        {% endfor %}
+        <p> {{ obProduct.rating|number_format(1, '.', ',') }} </p>
+    </div>
+    {% endif %}
+    
+    <a href="{{ obProduct.getPageUrl('product/product') }}" class="img">
+        <span class="pos">
+            <img src="{{obProduct.preview_image.getThumb(200, 190) }}" alt="">
+        </span>
+    </a>
+    
+    <div class="info">
+        <div class="d-flex">
+            <p>Артикул: <span> {{ obProduct.code }} </span></p>
+            
+            {% if obProduct.inCompare() %}
+                <a href="#" data-request="onRemoveFromCompare" data-request-data="product_id: {{obProduct.id}}" class="compare"></a>
+            {% else %}
+                <a href="#" data-request="onAddToCompare" data-request-data="product_id: {{obProduct.id}}" class="compare"></a>
+            {% endif %}
+            
+        </div>
+       
+        <a href="{{ obProduct.category.getPageUrl('product/catalog') }}"><p class="cat">{{ obProduct.category.name }}</p></a>
+        
+        <div class="d-flex">
+            <a href="{{ obProduct.getPageUrl('product/product') }}" class="name"> {{ obProduct.name }} </a>
+            <p class="price"><strong class="productPrice-{{obProduct.id}}"> {{ obOffer.price }} </strong> {{ obOffer.currency_code }} </p>
+        </div>
+    </div>
+    
+    <div class="add_to_cart">
+        <div class="grams">
+            {% set key = 0 %}
+            {% for obOfferItem in obListOffers %}
+                {% set obProperty = obOfferItem.property.getByCode('weight') %}
+                
+                <p  data-data="{{ {
+                        'cart': [
+                            {'offer_id': obOfferItem.id, 'quantity': 1, 'property': {'weight': obProperty.property_value.getValueString()} },
+                        ]
+                    }|json_encode() }}"
+                    onclick="$('.productPrice-{{obProduct.id}}').html('{{ obOfferItem.price }}'); " 
+                    class="card-item-value {{ key == 0 ? 'active' }}" data-price="{{obOfferItem.price}}"> 
+                    
+                     {{ obProperty.property_value.getValueString() }} {{ obProperty.measure.name }}
+                </p>
+                
+                {% set key = key + 1 %}
+            {% endfor %}
+        </div>
+        
+        <button class="buy"></button>
+    </div>
+</div>

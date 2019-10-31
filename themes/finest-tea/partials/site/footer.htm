@@ -1,0 +1,72 @@
+[viewBag]
+
+[staticMenu]
+code = "header-menu"
+==
+{% set obCategoryList = CategoryList.make().tree() %}
+
+<div class="wrap">
+    <div class="left">
+        <div class="block">
+            <a href="{{ 'index' | page }}" class="logo">
+                <picture>
+                    <source media="(min-width: 1400px)" srcset="{{ 'assets/images/logo.png' | theme }}">
+                    <source media="(min-width: 768px)" srcset="{{ 'assets/images/logo-tab.png' | theme }}">
+                    <img src="{{ 'assets/images/logo-mob.png' | theme }}" alt="">
+                </picture>
+            </a>
+            <div class="soc">
+                {% for link in this.theme.social_links %}
+                    <a href="{{ link.url }}" class="{{link.class}}"></a>
+                {% endfor %}
+                <!-- <a href="http://vk.com" class="vk"></a>
+                <a href="http://instagram.com" class="insta"></a>
+                <a href="http://facebook.com" class="fb"></a> -->
+            </div>
+        </div>
+        <div class="block mob_hide">
+            <h6>Магазин</h6>
+            <ul>
+                {% if staticMenu.menuItems %}    
+                    {% partial staticMenu ~ "::items" items=staticMenu.menuItems %}            
+                {% endif %}
+            </ul>
+        </div>
+        <div class="block mob_hide">
+            <h6>Каталог</h6>
+            <ul>
+                {% for obCategory in obCategoryList %}
+                    <li><a href="{{ obCategory.getPageUrl('product/catalog') }}">{{obCategory.name}}</a></li>
+                {% endfor %}                
+            </ul>
+        </div>
+        <div class="block">
+            <h6>Контакты</h6>
+            <a class="tel" href="tel:+38(900)900-90-90">
+                {{ this.theme.phone }}
+            </a>
+            <span class="alltime">Круглосуточно</span>
+            <p class="mail">{{this.theme.email}}</p>
+        </div>
+    </div>
+    <div class="right">
+        <div class="block subscribe mob_hide">
+          <h6>Подпишись на новости</h6>
+            <form name="form-subscribe-andradedev" id="form-subscribe-andradedev" data-request="{{ formSubscribe }}::onAddSubscriber" class="subscribe_form" data-request-update="'{{formSubscribe}}::alert': '#result'">
+                <div>
+                    <input type="text" name="email" placeholder="Ваш e-mail">
+                    <button form="form-subscribe-andradedev"><span></span></button>
+                </div>
+            </form>
+            <div id="result"></div>
+        </div>
+        <div class="block">
+            <h6 class="mob_hide">Способы оплаты</h6>
+            <div class="payment">
+                <img class="rob" src="{{ 'assets/images/icons/rob.png' | theme }}" alt="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <img class="liq" src="{{ 'assets/images/icons/liq.png' | theme }}" alt="">
+            </div>
+            <br>
+        </div>
+    </div>
+</div>

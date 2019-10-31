@@ -1,0 +1,163 @@
+[viewBag]
+==
+<div class="card_block">
+    <div class="gallery">
+        <div class="nav">
+            <div class="nav_arrows">
+                <div class="prev"></div>
+                <p>
+                    <span class="cur">01</span>
+                    &nbsp;/&nbsp;
+                    06
+                </p>
+                <div class="next"></div>
+            </div>
+        </div>
+        
+        <div class="small_img">
+            <div class="win">
+                <div class="reel">
+                    {% for key, image in obProduct.images %}
+                        <a href="#" class="{{ key == 0 ? 'active' }}">
+                            <span><img src="{{ image.getThumb(140, 130) }}" alt=""></span>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="big_img">
+            {% for key, image in obProduct.images %}
+                <a href="{{ image.path }}" class="{{ key == 0 ? 'active show' }}" data-fancybox="gallery">
+                    <span><img src="{{ image.path }} " alt=""></span>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="info">
+        <h1> {{ obProduct.name }}</h1>
+        
+        {% if obProduct.rating %}
+        <div class="stars">
+            {% for i in 1..5 %}
+                {% if obProduct.rating >= i  %}
+                    <div class="active"></div>
+                {% else %}
+                    <div></div>
+                {% endif %}
+            {% endfor %}
+            <p> {{ obProduct.rating|number_format(1, '.', ',') }} </p>
+        </div>
+        {% endif %}
+        
+        <div class="block">
+            <p class="line">Артикул: <span> {{ obProduct.code }} </span></p>
+            
+            <p class="line">В наличии</p>
+            <div class="order_block">
+                <div class="grams">
+                    <span>Вес</span>
+                    {% set key = 0 %}
+                    {% set obListOffers = obProduct.offer.sort('price|asc') %}
+                    {% set obOffer = obProduct.offer.sort('price|asc').first() %}
+                    {% for obOfferItem in obListOffers %}
+                        {% set obProperty = obOfferItem.property.getByCode('weight') %}
+                        
+                        <p  data-data="{{ {
+                                'cart': [
+                                    {'offer_id': obOfferItem.id, 'quantity': 1, 'property': {'weight': obProperty.property_value.getValueString()} },
+                                ]
+                            }|json_encode() }}"
+                            onclick="$('.productPrice-{{obProduct.id}}').html('{{ obOfferItem.price }}'); " 
+                            class="card-item-value {{ key == 0 ? 'active' }}" data-price="{{obOfferItem.price}}"> 
+                            
+                             {{ obProperty.property_value.getValueString() }} {{ obProperty.measure.name }}
+                        </p>
+                        
+                        {% set key = key + 1 %}
+                    {% endfor %}
+                </div>
+                
+                <div class="order_line">
+                    <p class="price"> 
+                        <strong class="productPrice-{{obProduct.id}}"> {{obOffer.price}} </strong> 
+                        <span>{{ obOffer.currency_code }}.</span>
+                    </p>
+                    <a href="#" class="btn">В корзину</a>
+                </div>
+                <a href="#" data-request="onAddToCompare" data-request-data="product_id: {{obProduct.id}}" class="add_to_compare">Добавить в сравнение</a>
+            </div>
+            
+            {% set obPropertyList = obProduct.property.group(2) %}
+            {% for obProeprty in obPropertyList if obProeprty.hasValue() %}
+                <p class="line">{{ obProeprty.name }}: <span>{{ obProeprty.property_value.getValueString() }} </span></p>
+            {% endfor %}
+            
+        </div>
+    </div>
+</div>
+
+<div class="d-flex">
+
+    <!-- Description -->
+    <div class="text_info">
+        <div class="tabs_block">
+            {% set propertiesTab = obProduct.property.getByCode('propertiesTab') %}
+            {% set howtobrewTab = obProduct.property.getByCode('howtobrewTab') %}
+            
+            <div class="tabs">
+                <div class="select">
+                    <h3 class="val">Описание</h3>
+                    <select>
+                        <option value="1">Описание</option>
+                        <option value="2">{{ propertiesTab.name }}</option>
+                        <option value="3">{{ howtobrewTab.name }}</option>
+                    </select>
+                </div>
+                <a href="#" data-id="1" class="active">Описание</a>
+                <a href="#" data-id="2"> {{ propertiesTab.name }} </a>
+                <a href="#" data-id="3"> {{ howtobrewTab.name }} </a>
+            </div>
+            <div class="tab_body">
+                <div id="tab_1" class="tab active">
+                    {{ obProduct.preview_text }}
+                </div>
+                
+                <div id="tab_2" class="tab">
+                    {{ propertiesTab.property_value.getValueString() }}
+                </div>
+                
+                <div id="tab_3" class="tab">
+                    {{ howtobrewTab.property_value.getValueString() }}
+                </div>
+            </div>
+        </div>
+        <div class="show_more">
+            <h4>Интересные факты о чае:</h4>
+            <span class="hide">
+                {{ obProduct.description|raw }}
+            </span>
+            <span class="read_more">Читать полностью</span>
+        </div>
+    </div>
+    
+    
+    <!-- Reviews -->
+    {% set obReviewList = obProduct.review %}
+    <div class="reviews">
+        <div class="d-flex">
+            <h2> <a href="{{ 'product/reviews'|page({slug: obProduct.slug}) }}"> Отзывы покупателей </a> </h2>
+            <a href="#" data-fancybox="add_review" data-src="#add_review" class="add_review">Добавить отзыв</a>
+            <a href="#" class="show_all">Все отзывы </a>
+        </div>
+        
+        <div class="scroll_box" id="products-reviews">
+            {% for review in obReviewList %}
+                {% partial 'blocks/review-item' review=review %}
+            {% endfor %}
+        </div>
+    </div>
+    
+    
+</div>

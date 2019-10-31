@@ -1,0 +1,11 @@
+plugin:
+    name: 'navshod.faq::lang.plugin.name'
+    description: 'navshod.faq::lang.plugin.description'
+    author: Navshod
+    icon: oc-icon-question
+    homepage: ''
+navigation:
+    main-menu-item:
+        label: 'Just FAQ'
+        url: navshod/faq/faqs
+        icon: icon-question

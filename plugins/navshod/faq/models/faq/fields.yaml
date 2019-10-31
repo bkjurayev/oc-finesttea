@@ -1,0 +1,22 @@
+fields:
+    name:
+        label: Name
+        span: auto
+        placeholder: ''
+        type: text
+    email:
+        label: Email
+        span: right
+        placeholder: ''
+        type: text
+    question:
+        label: Question
+        size: small
+        span: full
+        placeholder: ''
+        type: textarea
+    answer:
+        label: Answer
+        size: large
+        span: full
+        type: richeditor

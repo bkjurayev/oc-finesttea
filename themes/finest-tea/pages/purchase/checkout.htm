@@ -1,0 +1,18 @@
+title = "Чек"
+url = "/cart/checkout/:slug"
+layout = "default"
+is_hidden = 0
+child_of = "index"
+hide_crumb = 0
+crumb_title = "Чек"
+remove_crumb_trail = 0
+crumb_disabled = 0
+
+[OrderPage]
+slug = "{{ :slug }}"
+slug_required = 1
+==
+{% set obOrder = OrderPage.get() %}
+
+<h1 style="text-align: center"> Спасибо за покупку </h1>
+<p style="text-align: center"> Номер вашего заказа: <strong>{{ obOrder.order_number }}</strong> </p>

@@ -1,0 +1,48 @@
+[viewBag]
+==
+{% set obCartElementList = Cart.get() %}
+
+<div class="top">
+    <p class="current">01. Состав заказа</p>
+    <p>02. Контактные данные</p>
+    <p class="disable">03. Выбор доставкии оплаты</p>
+</div>
+<div class="orders_box">
+    {% if obCartElementList.isNotEmpty() %}
+        {% for obCartElement in obCartElementList %}
+            {% set obOffer = obCartElement.offer %}
+            {% set obProduct = obOffer.product %}
+            
+            <div class="order_item">
+                <div class="col_1">
+                    <img src="{{ obProduct.preview_image.getThumb(160, 115) }}" alt="">
+                    <p class="name">
+                        <a href="{{ obProduct.getPageUrl('product/product') }}">{{ obProduct.name }}</a>
+                    </p>
+                </div>
+                
+                <div class="col_2">
+                    <div class="price"> {{ obOffer.price }} <span>{{obOffer.currency}}.</span></div>
+                    <p>{{ obCartElement.quantity }}</p>
+                    
+                    <div class="price">{{ obCartElement.price }} <span>{{ obCartElement.currency }}.</span></div>
+                    <button data-id="{{obCartElement.id}}" class="del"></button>
+                </div>
+            </div>
+            
+        {% endfor %}
+    
+        
+    {% else %}
+        <div style="text-align: center">Cart is empty</div>
+    {% endif %}
+</div>
+
+
+<div class="bottom">
+    <p class="total">Итого {{ obCartElementList.getTotalPrice() }} <span>{{ obCartElementList.getCurrency() }}.</span></p>
+    <div class="flex">
+        <a href="{{'purchase/basket2'|page}}" class="btn">Оформить заказ</a>
+        <a href="{{'index'|page}}" class="back">К покупкам</a>
+    </div>
+</div>

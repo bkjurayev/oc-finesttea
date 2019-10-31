@@ -1,0 +1,36 @@
+[viewBag]
+==
+<div class="line">
+    <label>Имя</label>                
+    <input
+        name="login"
+        type="text"                    
+        id="userSigninLogin"
+        placeholder="Enter your {{ loginAttributeLabel|lower }}" />
+</div>
+<div class="line">
+    <label>Пароль</label>
+    <input
+        name="password"
+        type="password"
+        class="form-control"
+        id="userSigninPassword"
+        placeholder="Enter your password" />
+</div>
+
+{% if rememberLoginMode == 'ask' %}
+<div class="form-group">
+    <div class="checkbox">
+    <label><input name="remember" type="checkbox" value="1">Stay logged in</label>
+    </div>
+</div>
+{% endif %}
+<a href="#" class="forgot">Забыли пароль?</a>
+<button type="submit" class="btn">Отправить</button>
+<div class="sing_box">
+    <a href="#" class="vk"><img src="{{'assets/images/icons/sing_vk.svg'|theme}}" alt=""></a>
+    <a href="#" class="google"><img src="{{'assets/images/icons/sing_vk.svg'|theme}}" alt=""></a>
+    <a href="#" class="twitter"><img src="{{'assets/images/icons/sing_vk.svg'|theme}}" alt=""></a>
+    <a href="#" class="fb"><img src="{{'assets/images/icons/sing_vk.svg'|theme}}" alt=""></a>
+</div>
+<a href="#" data-fancybox="" data-src="#sing_up" class="bot_a">Регистрация</a>
